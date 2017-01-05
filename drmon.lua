@@ -42,6 +42,7 @@ if monitor == null then
 	error("No valid monitor was found")
 end
 monitor.clear()
+term.clear()
 
 if fluxgate == null then
 	error("No valid fluxgate was found")
@@ -176,10 +177,10 @@ function update()
     end
 
     for k, v in pairs (ri) do
-      print(k.. ": ".. v)
+      print(k.. ": ".. v.. "            ")
     end
-    print("Output Gate: ", fluxgate.getSignalLowFlow())
-    print("Input Gate: ", inputfluxgate.getSignalLowFlow())
+    print("Output Gate: ", fluxgate.getSignalLowFlow(), "     ")
+    print("Input Gate: ", inputfluxgate.getSignalLowFlow(), "     ")
 
     -- monitor output
 
@@ -194,7 +195,7 @@ function update()
       statusColor = colors.orange
     end
 
-    f.draw_text_lr(mon, 2, 2, 1, "Reactor Status", string.upper(ri.status), colors.white, statusColor, colors.black)
+    f.draw_text_lr(mon, 2, 2, 1, "Reactor Status", string.upper(ri.status .. "  "), colors.white, statusColor, colors.black)
 
     f.draw_text_lr(mon, 2, 4, 1, "Generation", f.format_int(ri.generationRate) .. " rf/t", colors.white, colors.lime, colors.black)
 
@@ -279,7 +280,7 @@ function update()
     if ri.status == "online" then
       if autoInputGate == 1 then 
         fluxval = ri.fieldDrainRate / (1 - (targetStrength/100) )
-        print("Target Gate: ".. fluxval)
+        print("Target Gate: ".. fluxval .. "            ")
         inputfluxgate.setSignalLowFlow(fluxval)
       else
         inputfluxgate.setSignalLowFlow(curInputGate)

@@ -71,10 +71,8 @@ end
 
 
 function clear(mon)
-  term.clear()
   term.setCursorPos(1,1)
   mon.monitor.setBackgroundColor(colors.black)
-  --mon.monitor.clear()
   mon.monitor.setCursorPos(1,1)
 end
 
