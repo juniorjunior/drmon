@@ -41,6 +41,7 @@ reactor = peripheral.wrap(reactorSide)
 if monitor == null then
 	error("No valid monitor was found")
 end
+monitor.clear()
 
 if fluxgate == null then
 	error("No valid fluxgate was found")
@@ -309,7 +310,7 @@ function update()
       emergencyTemp = true
     end
 
-    sleep(0.1)
+    sleep(0.5)
   end
 end
 

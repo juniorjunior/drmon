@@ -42,7 +42,7 @@ this is a computercraft LUA script that monitors everything about a draconic rea
 * install this code via running the install script using these commands :
 
 ```
-> pastebin get Ls1Wg3QQ install
+> pastebin get 8tQ775AS install
 > install
 ```
 * modify `startup` if you wish to configure/alter any variables mentioned in the feature list, you'll find them at the top of the file
