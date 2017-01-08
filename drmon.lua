@@ -195,7 +195,7 @@ function update()
       statusColor = colors.orange
     end
 
-    f.draw_text_lr(mon, 2, 2, 1, "Reactor Status", string.upper(ri.status .. "  "), colors.white, statusColor, colors.black)
+    f.draw_text_lr(mon, 2, 2, 1, "Reactor Status", string.upper("  " .. ri.status), colors.white, statusColor, colors.black)
 
     f.draw_text_lr(mon, 2, 4, 1, "Generation", f.format_int(ri.generationRate) .. " rf/t", colors.white, colors.lime, colors.black)
 
