@@ -43,7 +43,7 @@ local function trim(s)
 end
 
 local function writeCentered(text, y)
-   local x = math.max(math.floor((monWidth / 2) - (#text / 2)), 0)
+   local x = math.max(math.floor((monWidth / 2) - (#text / 2) + 1), 0)
    display.setCursorPos(x, y)
    display.write(text)
 end
@@ -104,19 +104,67 @@ function spairs(t)
    end
 end
 
+local function drawLine(row, color, percent)
+   if percent == nil then percent = 100 end
+   local drawLength = monWidth - 2
+   display.setCursorPos(2, row)
+   local filledLength = math.floor(drawLength * (percent / 100))
+   local unfilledLength = drawLength - filledLength
+   display.setBackgroundColor(color)
+   for i=1,filledLength do
+      display.write(' ')
+   end
+   display.setBackgroundColor(colors.gray)
+   for i=1,unfilledLength do
+      display.write(' ')
+   end
+   display.setBackgroundColor(colors.black)
+end
+
 local function updateDisplay()
    local row = 3
    local formatted
+   local count = 0
+   local infoColors = {colors.cyan, colors.orange, colors.lime, colors.yellow, colors.magenta, colors.pink}
+   local totalCurrent = 0
+   local totalMaximum = 0
    for label, info in spairs(status) do
-      display.setCursorPos(1, row)
+      count = count + 1
+      totalCurrent = totalCurrent + info.current
+      totalMaximum = totalMaximum + info.maximum
+      display.setCursorPos(2, row)
       formatted = formatNumber(info.current)
-      display.write(label .. ": " .. string.rpad(formatted, 6) .. " RF")
+      display.setTextColor(infoColors[count])
+      display.write(label .. ": ")
+      display.setTextColor(colors.white)
+      display.write(string.rpad(formatted, 7) .. " RF")
       row = row + 1
-      display.setCursorPos(1, row)
+      display.setCursorPos(2, row)
       formatted = formatNumber(info.maximum)
-      display.write(label .. ": " .. string.rpad(formatted, 6) .. " RF")
+      display.setTextColor(infoColors[count])
+      display.write(label .. ": ")
+      display.setTextColor(colors.white)
+      display.write(string.rpad(formatted, 7) .. " RF")
+      row = row + 1
+      drawLine(row, colors.green, math.floor((info.current/info.maximum)*100))
       row = row + 2
    end
+   display.setCursorPos(2, row)
+   display.setTextColor(colors.purple)
+   formatted = formatNumber(totalCurrent)
+   display.write("Storage Cur: ")
+   display.setTextColor(colors.white)
+   display.write(string.rpad(formatted, 6) .. " RF")
+   row = row + 1
+   display.setCursorPos(2, row)
+   display.setTextColor(colors.purple)
+   formatted = formatNumber(totalMaximum)
+   display.write("Storage Max: ")
+   display.setTextColor(colors.white)
+   display.write(string.rpad(formatted, 6) .. " RF")
+   row = row + 1
+   display.setCursorPos(2, row)
+   drawLine(row, colors.green, math.floor((totalCurrent/totalMaximum)*100))
 end
 
 if useMonitor == true then
@@ -131,7 +179,9 @@ if useMonitor == true then
 end
 
 display.clear()
+display.setTextColor(colors.red)
 writeCentered("Draconian Energy Storage", 1)
+display.setTextColor(colors.white)
 
 while true do
    local event, p1, p2, p3, p4, p5 = os.pullEvent()
